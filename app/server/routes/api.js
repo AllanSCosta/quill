@@ -1,4 +1,6 @@
+var TeamController = require('../controllers/TeamController');
 var UserController = require('../controllers/UserController');
+var EventController = require('../controllers/EventController');
 var SettingsController = require('../controllers/SettingsController');
 
 var request = require('request');
@@ -135,6 +137,15 @@ module.exports = function(router) {
     }
   });
 
+  router.get('/events', isAdmin, function(req, res){
+    EventController.getAll(defaultResponse(req, res));
+  });
+
+  router.get('/teams', isAdmin, function(req, res){
+    TeamController.getAll(defaultResponse(req, res));
+  });
+
+
   /**
    * [ADMIN ONLY]
    */
@@ -151,6 +162,10 @@ module.exports = function(router) {
     UserController.getById(req.params.id, defaultResponse(req, res));
   });
 
+  router.get('/events/:id', isOwnerOrAdmin, function(req, res){
+    EventController.getById(req.params.id, defaultResponse(req, res));
+  });
+
   /**
    * [OWNER/ADMIN]
    *
@@ -162,6 +177,24 @@ module.exports = function(router) {
 
     UserController.updateProfileById(id, profile , defaultResponse(req, res));
   });
+
+  router.put('/events/create', isOwnerOrAdmin, function(req, res){
+    var create = req.body.create;
+    EventController.createEvent(create, defaultResponse(req, res));
+  });
+
+ router.put('/teams/:id/profile', isOwnerOrAdmin, function(req, res){
+   var profile = req.body.profile;
+   var id = req.params.id;
+   TeamController.updateProfileById(id, profile, defaultResponse(req, res));
+ });
+
+ router.put('/events/:id/update', isOwnerOrAdmin, function(req, res){
+   var update = req.body;
+   var id = req.params.id;
+   EventController.updateProfileById(id, update, defaultResponse(req, res));
+ });
+
 
   /**
    * [OWNER/ADMIN]

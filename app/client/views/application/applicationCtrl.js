@@ -8,10 +8,11 @@ angular.module('reg')
     'settings',
     'Session',
     'UserService',
-    function($scope, $rootScope, $state, $http, currentUser, Settings, Session, UserService){
-
+    function($scope, $rootScope, $state, $http, currentUser, settings, Session, UserService) {
       // Set up the user
+
       $scope.user = currentUser.data;
+      $scope.selectedPic = $scope.user.profile.pic ? $scope.user.profile.pic : null;
 
       // Is the student from MIT?
       $scope.isMitStudent = $scope.user.email.split('@')[1] == 'mit.edu';
@@ -25,7 +26,7 @@ angular.module('reg')
       populateSchools();
       _setupForm();
 
-      $scope.regIsClosed = Date.now() > Settings.data.timeClose;
+      $scope.regIsClosed = Date.now() > settings.data.timeClose;
 
       /**
        * TODO: JANK WARNING
@@ -45,52 +46,47 @@ angular.module('reg')
 
         $http
           .get('/assets/schools.csv')
-          .then(function(res){ 
+          .then(function(res){
             $scope.schools = res.data.split('\n');
             $scope.schools.push('Other');
 
             var content = [];
 
-            for(i = 0; i < $scope.schools.length; i++) {                                          
-              $scope.schools[i] = $scope.schools[i].trim(); 
+            for(i = 0; i < $scope.schools.length; i++) {
+              $scope.schools[i] = $scope.schools[i].trim();
               content.push({title: $scope.schools[i]})
             }
 
             $('#school.ui.search')
               .search({
                 source: content,
-                cache: true,     
-                onSelect: function(result, response) {                                    
+                cache: true,
+                onSelect: function(result, response) {
                   $scope.user.profile.school = result.title.trim();
-                }        
-              })             
-          });          
+                }
+              })
+          });
       }
 
       function _updateUser(e){
         UserService
           .updateProfile(Session.getUserId(), $scope.user.profile)
-          .success(function(data){
-            sweetAlert({
-              title: "Awesome!",
-              text: "Your application has been saved.",
-              type: "success",
-              confirmButtonColor: "#e76482"
-            }, function(){
-              $state.go('app.dashboard');
+          .then(response => {
+            sweetAlert("Prontin", "Seu perfil foi salvo.", "success").then(value => {
+              $state.go("app.dashboard");
             });
-          })
-          .error(function(res){
-            sweetAlert("Uh oh!", "Something went wrong.", "error");
+          }, response => {
+            sweetAlert("Eita!", "Algo deu ruim.", "error");
           });
       }
+
 
       function isMinor() {
         return !$scope.user.profile.adult;
       }
 
       function minorsAreAllowed() {
-        return Settings.data.allowMinors;
+        return settings.data.allowMinors;
       }
 
       function minorsValidation() {
@@ -160,15 +156,50 @@ angular.module('reg')
         });
       }
 
+      function getBase64(file) {
+         var reader = new FileReader();
+         reader.readAsDataURL(file);
+         reader.onload = function () {
+           var img = new Image;
+           img.src = reader.result;
+           img.onload = function() {
+             const isLandscape = img.width > img.height;
+             const L = isLandscape ? img.height : img.width;
 
+             let delx = 0;
+             let dely = 0;
+
+             if (isLandscape) {
+               delx = (img.width - L) / 2;
+             } else {
+               dely = (img.height - L) / 2;
+             }
+
+             imageClipper(reader.result, function() {
+                this.crop(delx, dely, L, L)
+                    .resize(150, 150)
+                    .toDataURL(function(dataUrl) {
+                     $scope.selectedPic = dataUrl;
+                     $scope.user.profile.pic = dataUrl;
+                     $('#profile-logo-placeholder').css('display', 'None');
+                     $('#profile-logo-picture').removeClass('ng-hide');
+                     $('#profile-logo-picture').attr('src', dataUrl);
+                 });
+               })
+           };
+         };
+      }
+
+      $scope.onFileSelected = function(files){
+        var file = files[0];
+        getBase64(file);
+      };
 
       $scope.submitForm = function(){
         if ($('.ui.form').form('is valid')){
           _updateUser();
-        }
-        else{
+        } else {
           sweetAlert("Uh oh!", "Please Fill The Required Fields", "error");
         }
       };
-
     }]);

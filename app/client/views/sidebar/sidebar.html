@@ -8,44 +8,40 @@
   <div ui-sref-active="active"
        ui-sref="app.dashboard"
        class="item">
-    Dashboard
+  Home
   </div>
 
-  <div ng-show="currentUser.verified">
-
-    <div
-      ui-sref-active="active"
-      ui-sref="app.application"
-      ng-show="!currentUser.status.declined"
-      class="item">
-      Application
-    </div>
-
-    <div
-      ui-sref-active="active"
-      ui-sref="app.confirmation"
-      ng-show="!pastConfirmation && currentUser.status.admitted && !currentUser.status.declined"
-      class="item">
-      Confirmation
-    </div>
+  <div
+    ui-sref-active="active"
+    ui-sref="app.teamview"
+    ng-show="!currentUser.status.declined"
+    class="item">
+    Equipes
+  </div>
 
     <div
       ui-sref-active="active"
       ui-sref="app.team"
       ng-show="!currentUser.status.declined"
       class="item">
-      Team
+      Minha Equipe
     </div>
 
     <div
       ui-sref-active="active"
-      ui-sref="app.admin.stats"
-      class="item"
-      ng-show="currentUser.admin">
-      Admin
+      ui-sref="app.application"
+      ng-show="!currentUser.status.declined"
+      class="item">
+      Meu Perfil
     </div>
 
-  </div>
+    <div
+      ui-sref-active="active"
+      ui-sref="app.admin.events"
+      class="item"
+      ng-show="currentUser.admin">
+      Modo Deus
+    </div>
 
   <div class="item"
        ng-click="logout()">
@@ -63,5 +59,3 @@
   <img ng-show="!showSidebar" src="assets/images/logo.svg" />
   <span class="close" ng-show="showSidebar">&#x2715</span>
 </div>
-
-

@@ -1,7 +1,94 @@
 <div id="team" class="page">
-  <div class="divided title">
-    Team
+  <style media="screen">
+    .image-upload > input {
+      display: none;
+    }
+
+    .team-logo {
+      height: 130px;
+      cursor: pointer;
+      display:block;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    #team-logo:hover {
+      opacity: 0.8;
+    }
+
+    #mdviewer {
+      overflow-y: scroll;
+      overflow-x: hidden;
+      max-height: none;
+      min-height: 500px;
+    }
+    #mdviewer-wrapper {
+      padding: 10px !important;
+    }
+
+    p {
+      text-align: left !important;
+    }
+
+    #teammembers {
+      text-align: center !important;
+    }
+
+
+    .circular--landscape {
+      display: block;
+      position: relative;
+      width: 175px;
+      height: 175px;
+      overflow: hidden;
+      border-radius: 50%;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    .circular--landscape img {
+      width: auto;
+      height: 100%;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+
+
+  </style>
+
+  <div class="image-upload field">
+    <label for="file-input">
+      <img id="team-logo-placeholder" class="team-logo" ng-show="!selectedPic" src="../assets/images/logoplaceholder.png"/>
+
+      <div class="circular--landscape">
+        <img id="team-logo-picture" class="team-logo" ng-show="selectedPic" src="{{selectedPic}}"/>
+      </div>
+
+    </label>
+    <input
+      id="file-input"
+      type="file"
+      onChange='angular.element(this).scope().onFileSelected(this.files)'
+      ng-model="team.profile.pic" />
   </div>
+
+  <div class="title">
+    {{user.teamCode}}
+  </div>
+  <br>
+  <div>
+    <p id="teammembers">
+      <b
+        ng-repeat="user in teammates"
+        class="item">
+          {{(user.profile.name + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") || ''}}
+      </b>
+    </p>
+  </div>
+
+
+  <br><br><br>
   <div class="ui stackable centered page grid">
     <div class="column">
       <div
@@ -10,76 +97,108 @@
         {{error}}
       </div>
 
-      <div class="ui segment">
-        <div
-          ng-show="!user.teamCode && !regIsOpen">
-          <p>
-            {{ TEAM.NO_TEAM_REG_CLOSED }}
-          </p>
-        </div>
-        <div
-          class="ui form"
-          ng-show="!user.teamCode && regIsOpen">
+      <div class="ui">
+        <div ng-show="user.teamCode">
 
-          <div class="title">
-            Join or Create a Team
+          <div class="ui form"
+                ng-class="{'loading': loading}">
+
+          <fieldset>
+
+            <div class="divided title">Mídia Social</div>
+            <p>
+              <i> Nenhum dos campos abaixo é obrigatório.</i>
+            </p>
+            <div class="ui segment">
+
+            <div class="field">
+              <label>Whatsapp</label>
+              <input type="text"
+                     placeholder="+55 00 000000000"
+                     ng-model="team.profile.whatsapp">
+            </div>
+
+            <div class="field">
+              <label>Facebook</label>
+              <input type="text"
+                     placeholder="https://www.facebook/stuff"
+                     ng-model="team.profile.facebook">
+            </div>
+
+            <div class="field">
+              <label>Website</label>
+              <input type="text"
+                     placeholder="www.website.com"
+                     ng-model="team.profile.website">
+            </div>
+
+            <div class="field">
+              <label>Twitter</label>
+              <input type="text"
+                     placeholder="https://www.twitter/stuff"
+                     ng-model="team.profile.twitter">
+            </div>
+
+            <div class="field">
+              <label>Youtube</label>
+              <input type="text"
+                     placeholder="https://www.youtube/stuff"
+                     ng-model="team.profile.youtube">
+            </div>
+
           </div>
-
           <br>
+          <div class="divided title">Perfil da Equipe</div>
+          <p>
+            <i> Essa área é sua para descrever o perfil geral da equipe. A equipe da HackBrazil, mentores e outras equipes vão poder ver
+            esse perfil. Ele é processado em Markdown. </i>
+          </p>
 
-          <div class="field">
-            <input
-              class="ui input"
-              type="text"
-              placeholder="Choose your team name..."
-              ng-model="code">
-          </div>
+          <div class="ui segment">
+            <div class="field">
+              <div class="">
+                <div class="btn-group">
+                  <label
+                    class="btn btn-outline-dark"
+                    ng-click="toggleMarkdown()"
+                    ng-model="viewMarkdown"
+                    uib-btn-radio="false">Edição</label>
+                  <label
+                    class="btn btn-outline-dark"
+                    ng-model="viewMarkdown"
+                    ng-click="toggleMarkdown()"
+                    uib-btn-radio="true">Preview</label>
+                </div>
+              </div>
+              <textarea
+                id="essay-area"
+                ng-model="team.profile.essay"
+                ng-show="!viewMarkdown"
+                placeholder="A equipe X vai revolucionar Y através de Z."
+              >
+              </textarea>
+              <div
+                ng-show="viewMarkdown"
+                id="mdviewer-wrapper"
+                class="border"
+              >
+                <div id="mdviewer">
+                </div>
+              </div>
+            </div>
+            </div>
+          </fieldset>
 
+          <div class="ui divider"></div>
           <div class="field">
-            <button
-              class="ui fluid pink button"
-              ng-click="joinTeam()">
-              Join or Create Team
+            <button type="submit"
+                    class="fluid ui black button"
+                    ng-click="submitForm()">
+              Salvar
             </button>
           </div>
 
-        </div>
 
-        <div
-          ng-show="user.teamCode">
-          <div class="form">
-            <div class="title">
-              Your Team Name:
-            </div>
-          </div>
-          <br>
-          <div class="subheader">
-            {{user.teamCode}}
-          </div>
-
-          <br />
-
-          <div class="ui divider"></div>
-
-          <div class="form">
-            <div class="title">
-              Your Team:
-            </div>
-          </div>
-
-          <p
-            ng-repeat="user in teammates"
-            class="item">
-            {{user.profile.name || 'Somebody (has not filled out their profile!)'}}
-          </p>
-
-          <div
-            ng-show="regIsOpen">
-            <div class="ui divider"></div>
-
-            <button
-              class="ui fluid red button"
-              ng-click="leaveTeam()">Leave Team</button>
           </div>
 
         </div>

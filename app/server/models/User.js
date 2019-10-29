@@ -19,17 +19,8 @@ var profile = {
     default: false,
   },
 
-  school: {
+  place: {
     type: String,
-    min: 1,
-    max: 150,
-  },
-
-  graduationYear: {
-    type: String,
-    enum: {
-      values: '2016 2017 2018 2019'.split(' '),
-    }
   },
 
   description: {
@@ -44,13 +35,7 @@ var profile = {
     max: 1500
   },
 
-  // Optional info for demographics
-  gender: {
-    type: String,
-    enum : {
-      values: 'M F O N'.split(' ')
-    }
-  },
+  pic: String,
 
 };
 
@@ -272,7 +257,7 @@ schema.methods.generateTempAuthToken = function(){
 //=========================================
 
 schema.statics.generateHash = function(password) {
-  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 };
 
 /**
@@ -281,7 +266,7 @@ schema.statics.generateHash = function(password) {
  * @param  {Function} cb    args(err, email)
  */
 schema.statics.verifyEmailVerificationToken = function(token, callback){
-  jwt.verify(token, JWT_SECRET, function(err, email){
+  jwt.verify(token, JWT_SECRET, function(err, email) {
     return callback(err, email);
   });
 };
@@ -331,15 +316,12 @@ schema.statics.getByToken = function(token, callback){
 schema.statics.validateProfile = function(profile, cb){
   return cb(!(
     profile.name.length > 0 &&
-    profile.adult &&
-    profile.school.length > 0 &&
-    ['2016', '2017', '2018', '2019'].indexOf(profile.graduationYear) > -1 &&
-    ['M', 'F', 'O', 'N'].indexOf(profile.gender) > -1
+    profile.place.length > 0
     ));
 };
 
 //=========================================
-// Virtuals
+// Virtual
 //=========================================
 
 /**

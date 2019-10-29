@@ -1,253 +1,193 @@
+<style>
+
+#modal-wrapper {
+  display: block;
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+small.badge {
+  display: none !important;
+}
+
+div[aria-expanded=true] {
+    background-color:blue;
+    display:block !important;
+}
+
+.cal-event-list {
+  background-color: #333333 !important;
+  font-family: Lato,'Helvetica Neue',Helvetica,sans-serif !important;
+}
+
+.a-css-class-name {
+  text-align: left !important;
+}
+
+span .event {
+  display: inline-block !important;
+}
+
+mwl-calendar .event {
+    display: inline-block !important;
+}
+
+.ui.dimmer {
+  text-align: left !important;
+}
+
+#modal-title {
+  color:white;
+}
+
+.event-list-item {
+  text-align: left;
+}
+
+</style>
+
 <div id="dashboard" class="page">
   <div class="divided title">
-    Dashboard
+    HOME
   </div>
+
+  <div class="modal calendar-events bd-example-modal-lg">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+   <div class="modal-content">
+
+     <div class="modal-header">
+       <h2 class="modal-title" id="modal-title"> {{selectedEvent.title}} </h2>
+       <button type="button" class="close" ng-click="modalClose()" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+       </button>
+     </div>
+     <div class="modal-body">
+       <div id="date-subtitle">
+         <p>
+           <b class='small title' ng-if="selectedEvent.startsAt">
+             {{selectedEvent.startsAt}}
+           </b>
+           <b class='small title' ng-if="selectedEvent.endsAt">
+             Até
+           </b>
+           <b class='small title' ng-if="selectedEvent.endsAt">
+             {{selectedEvent.endsAt}}
+           </b>
+         </p>
+       </div>
+       <br><br>
+
+      <div id="event-description">
+      </div>
+    </div>
+
+    </div>
+  </div>
+</div>
 
   <div class="ui stackable centered page grid">
     <div class="column">
       <div class="ui status segment">
         <div class="small title">
-          Your status:
+           Bem vindo de volta, {{user.profile.name}}!
         </div>
         <br>
 
-        <div
-          class="state"
-          ng-class="user.status.name"
-          ng-if="!showWaitlist && !dashState('admittedAndCannotConfirm')">
-          {{user.status.name}}
-        </div>
-
-        <div
-          class="declined state"
-          ng-if="dashState('admittedAndCannotConfirm')">
-          Expired Admission
-        </div>
-
-
-        <div
-          ng-if="showWaitlist"
-          class="waitlist state">
-          On waitlist
-        </div>
-
         <div class="ui divider"></div>
+        <div class="small title"> {{calendarTitle}} </div>
+        <br>
 
-        <div ng-if="user.profile.name.length > 0">
-          <p>
-            <strong>
-              Welcome back, {{user.profile.name}}!
-            </strong>
-          </p>
-          <p>
-          </p>
-        </div>
-
-        <div
-          ng-if="dashState('unverified')"
-          class="description">
-          <p>
-            <strong>
-            Your email address ({{user.email}}) is not yet verified.
-            </strong>
-          </p>
-          <p>
-            {{ DASHBOARD.UNVERIFIED }}
-          </p>
-          <div class="ui purple button" ng-click="resendEmail()">
-            Resend verification email
-          </div>
-        </div>
-
-        <div
-          ng-class="settings.timeClose"
-          ng-if="!dashState('admittedAndCanConfirm') || !dashState('admittedAndCannotConfirm') || !dashState('confirmed') || !dashState('declined')">
-          <strong>
-            Registration Deadline:
-          </strong>
-          {{ timeClose }}
-        </div>
-
-        <div
-          ng-class="settings.timeConfirm"
-          ng-if="dashState('admittedAndCanConfirm') || dashState('admittedAndCannotConfirm') || dashState('confirmed') || dashState('declined')">
-          <strong>
-            Confirmation Deadline:
-          </strong>
-          {{ timeConfirm }}
-        </div>
-
-        <div
-          ng-if="dashState('openAndIncomplete')"
-          class="description">
-          <p>
-            <strong>
-                {{ DASHBOARD.INCOMPLETE_TITLE }}
-            </strong>
-          </p>
-          <p>
-            {{ DASHBOARD.INCOMPLETE }}
-          </p>
-
-          <div class="ui purple button"
-               ui-sref="app.application">
-            Complete your application
+        <div class="row">
+          <div class="col-md-6 text-center">
+            <div class="btn-group">
+              <button
+                class="btn cal-mod btn-outline-dark"
+                mwl-date-modifier
+                date="viewDate"
+                decrement="view">
+                Antes
+              </button>
+              <button
+                class="btn cal-mod btn-outline-dark"
+                ng-click='setToToday()'
+                >
+                Hoje
+              </button>
+              <button
+                class="btn cal-mod btn-outline-dark"
+                mwl-date-modifier
+                date="viewDate"
+                increment="view">
+                Depois
+              </button>
+            </div>
           </div>
 
+          <br class="visible-xs visible-sm">
+          <div class="col-md-6 text-center">
+            <div class="btn-group">
+              <label class="btn btn-outline-dark" ng-model="view" uib-btn-radio="'year'">Ano</label>
+              <label class="btn btn-outline-dark" ng-model="view" uib-btn-radio="'month'">Mês</label>
+              <label class="btn btn-outline-dark" ng-model="view" uib-btn-radio="'day'">Dia</label>
+            </div>
+          </div>
+        </div>
+        <br>
+
+        <mwl-calendar
+            view="view"
+            view-date="viewDate"
+            events="events"
+            cell-auto-open-disabled="false"
+            view-title="calendarTitle"
+            on-event-click="clickEvent(calendarEvent)"
+            on-event-times-changed="calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+            cell-is-open="true">
+        </mwl-calendar>
+        <br>
+        <div class="ui divider"></div>
+        <br>
+        <div class="small title divided">
+           Próximos eventos
         </div>
 
+
+        <ul class="list-group">
+          <li ng-repeat="event in comingEvents" ng-click="clickEvent(event)" class="event-list-item list-group-item btn btn-outline-dark">
+            <i class="ion-md-square" style="color: {{event.color.primary}}"></i>
+            &nbsp; {{event.title}}
+          </li>
+        </ul>
+
+
+   <br>
+   <div class="ui divider"></div>
+   <br><br>
         <div
           ng-if="dashState('openAndSubmitted')"
           class="description">
-          <p>
-            <strong>
-                {{ DASHBOARD.SUBMITTED_TITLE }}
-            </strong>
-          </p>
-          <p>
-            {{ DASHBOARD.SUBMITTED }}
-          </p>
-          <div class="ui purple button"
+
+          <div class="ui black button"
                ui-sref="app.application">
-            Edit your application
+            Editar Perfil
           </div>
 
           <div
-            class="ui pink button"
+            class="ui black button"
+            ng-show="user.teamCode"
+            ui-sref="app.team">
+            Sua Equipe
+          </div>
+
+          <div
+            class="ui black button"
             ng-show="!user.teamCode"
             ui-sref="app.team">
-            Create or join a team
-          </div>
-
-          <div
-            class="ui pink button"
-            ng-show="user.teamCode"
-            ui-sref="app.team">
-            View your Team
+            Sua Equipe
           </div>
 
         </div>
 
-        <div
-          ng-if="dashState('closedAndIncomplete')">
-          <p>
-            <strong>
-                {{ DASHBOARD.CLOSED_AND_INCOMPLETE_TITLE }}
-            </strong>
-          </p>
-          <p>
-            {{ DASHBOARD.CLOSED_AND_INCOMPLETE }}
-          </p>
-        </div>
-
-        <div
-          ng-if="dashState('closedAndSubmitted')"
-          class="description" >
-
-          <div
-            class="markdown"
-            ng-bind-html="waitlistText">
-          </div>
-
-          <div class="ui purple button"
-               ui-sref="app.application">
-            View your application
-          </div>
-
-          <div
-            class="ui pink button"
-            ng-show="user.teamCode"
-            ui-sref="app.team">
-            View your Team
-          </div>
-        </div>
-
-        <div
-          class="description"
-          ng-if="dashState('admittedAndCanConfirm')">
-
-          <div class="markdown">
-            <h4>
-                {{ DASHBOARD.ADMITTED_AND_CAN_CONFIRM_TITLE }}
-            </h4>
-          </div>
-
-          <div
-            class="markdown"
-            ng-bind-html="acceptanceText">
-          </div>
-
-          <div class="markdown">
-            <h4>
-                {{ DASHBOARD.ADMITTED_AND_CAN_CONFIRM }}
-            </h4>
-          </div>
-
-          <div class="ui purple button"
-               ui-sref="app.confirmation">
-            Confirm your spot
-          </div>
-
-          <div class="ui red button"
-               ng-click="declineAdmission()">
-            Sorry, I can't make it
-          </div>
-
-        </div>
-
-        <div
-          class="description"
-          ng-if="dashState('admittedAndCannotConfirm')">
-
-          <div class="markdown">
-            <h4>
-                {{ DASHBOARD.ADMITTED_AND_CANNOT_CONFIRM_TITLE }}
-            </h4>
-
-            <p>
-                {{ DASHBOARD.ADMITTED_AND_CANNOT_CONFIRM }}
-            </p>
-          </div>
-
-        </div>
-
-        <div
-          class="description"
-          ng-if="dashState('confirmed')">
-
-          <div
-            ng-show="!pastConfirmation"
-            class="markdown">
-            <h4>
-                {{ DASHBOARD.CONFIRMED_NOT_PAST_TITLE }}
-            </h4>
-          </div>
-
-          <div
-            class="markdown"
-            ng-bind-html="confirmationText">
-          </div>
-
-          <div class="ui purple button"
-               ui-sref="app.confirmation">
-            {{pastConfirmation ? 'View' : 'Edit'}} your confirmation information
-          </div>
-
-          <div class="ui red button"
-               ng-click="declineAdmission()">
-            Sorry, I can't make it
-          </div>
-
-        </div>
-
-        <div
-          class="description"
-          ng-if="dashState('declined')">
-
-          <p>
-            {{ DASHBOARD.DECLINED }}
-          </p>
-        </div>
 
       </div>
 

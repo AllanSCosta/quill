@@ -1,6 +1,6 @@
-var app = angular.module('reg', [
-  'ui.router',
-]);
+var app = angular.module('reg',
+['ui.router']
+);
 
 app
   .config([
@@ -23,4 +23,3 @@ app
       }
 
   }]);
-

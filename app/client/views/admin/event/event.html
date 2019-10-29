@@ -1,0 +1,113 @@
+<style>
+  #mdviewer {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: none;
+    min-height: 500px;
+  }
+  #mdviewer-wrapper {
+    padding: 10px !important;
+  }
+</style>
+<div id="events" class="page">
+  <div class="ui stackable centered page grid">
+    <div class="column">
+      <div
+        class="ui error message"
+        ng-show="error">
+        {{error}}
+      </div>
+      <div class="ui segment"
+      >
+          <div class="ui form">
+
+          <div class="divided title">
+            Editar Evento
+          </div>
+
+          <fieldset>
+
+          <div class="field">
+            <label> Título </label>
+            <input type="text"
+                   name="name"
+                   ng-model="event.title">
+          </div>
+
+            <div class="field">
+              <label id="color-label">Cor</label>
+              <select ng-model="event.color" name="cor">
+                <option ng-repeat="x in colors" value="{{x.code}}" ng-selected="x.code == event.color">{{x.name}}</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Tipo de Evento</label>
+              <select
+                name="year"
+                ng-model="eventType">
+                <option value="long">Evento Longo</option>
+                <option value="point">Evento Pontual</option>
+              </select>
+            </div>
+
+            <div class="field" ng-if="eventType == 'long'">
+              <label> Começo </label>
+              <input type="datetime-local"
+                     ng-model="event.startsAt">
+            </div>
+
+            <div class="field">
+              <label> {{ eventType == 'point' ? "Prazo" : "Fim"}} </label>
+              <input type="datetime-local"
+                     ng-model="event.endsAt">
+            </div>
+            <div class="ui divider"></div>
+
+            <div class="field">
+              <div class="">
+                <div class="btn-group">
+                  <label
+                    class="btn btn-outline-dark"
+                    ng-click="toggleMarkdown()"
+                    ng-model="viewMarkdown"
+                    uib-btn-radio="false">Edição</label>
+                  <label
+                    class="btn btn-outline-dark"
+                    ng-model="viewMarkdown"
+                    ng-click="toggleMarkdown()"
+                    uib-btn-radio="true">Preview</label>
+                </div>
+              </div>
+
+              <textarea
+                        rows="35"
+                        id="description-area"
+                        ng-model="event.description"
+                        ng-show="!viewMarkdown">
+              </textarea>
+
+              <div
+                id="mdviewer-wrapper"
+                class="border"
+                ng-show="viewMarkdown"
+              >
+                <div id="mdviewer"></div>
+              </div>
+
+            </div>
+          </fieldset>
+
+          <div class="ui divider"></div>
+          <div class="field">
+            <button type="submit"
+                    class="fluid ui black button"
+                    ng-click="updateProfile()">
+              Atualizar Evento
+            </button>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

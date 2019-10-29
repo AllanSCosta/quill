@@ -75,6 +75,25 @@ angular.module('reg')
           }
         }
       })
+      .state('app.teamview', {
+        url: "/teamview",
+        templateUrl: "views/teamview/teamview.html",
+        controller: 'TeamviewCtrl',
+        data: {
+          requireVerified: true
+        },
+        resolve: {
+          currentTeam: function(UserService){
+            return UserService.getTeam();
+          },
+          currentUser: function(UserService){
+            return UserService.getCurrentUser();
+          },
+          settings: function(SettingsService){
+            return SettingsService.getPublicSettings();
+          }
+        }
+      })
       .state('app.confirmation', {
         url: "/confirmation",
         templateUrl: "views/confirmation/confirmation.html",
@@ -104,6 +123,7 @@ angular.module('reg')
           }
         }
       })
+
       .state('app.admin', {
         views: {
           '': {
@@ -119,6 +139,21 @@ angular.module('reg')
         url: "/admin",
         templateUrl: "views/admin/stats/stats.html",
         controller: 'AdminStatsCtrl'
+      })
+      .state('app.admin.events', {
+        url: "/admin",
+        templateUrl: "views/admin/events/events.html",
+        controller: 'AdminEventsCtrl'
+      })
+      .state('app.admin.event', {
+        url: "/admin/events/:id",
+        templateUrl: "views/admin/event/event.html",
+        controller: 'AdminEventCtrl',
+        resolve: {
+          'event': function($stateParams, EventService){
+            return EventService.get($stateParams.id);
+          }
+        }
       })
       .state('app.admin.users', {
         url: "/admin/users?" +

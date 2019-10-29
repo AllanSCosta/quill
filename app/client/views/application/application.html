@@ -1,16 +1,78 @@
 <div id="application" class="page">
+
+
+  <style media="screen">
+    .image-upload > input {
+      display: none;
+    }
+
+    .image-upload label {
+      display:block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .profile-logo {
+      height: 130px;
+      cursor: pointer;
+      display: block;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    #profile-logo:hover {
+      opacity: 0.8;
+    }
+
+    .circular--landscape {
+      display: block;
+      position: relative;
+      width: 175px;
+      height: 175px;
+      overflow: hidden;
+      border-radius: 50%;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    .circular--landscape img {
+      width: auto;
+      height: 100%;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+
+  </style>
+
+
   <div class="divided title">
-    Application
+    Perfil
   </div>
 
+  <div class="image-upload field">
+    <label for="file-input">
+      <div class="circular--landscape">
+        <img id="profile-logo-placeholder" class="profile-logo" ng-show="!selectedPic" src="../assets/images/logoplaceholder.png"/>
+        <img id="profile-logo-picture" class="profile-logo" ng-show="selectedPic" src="{{selectedPic}}"/>
+      </div>
+    </label>
+    <input
+      id="file-input"
+      type="file"
+      onChange='angular.element(this).scope().onFileSelected(this.files)'
+      ng-model="user.profile.pic" />
+  </div>
+
+  <br>
   <div class="ui stackable page grid">
     <div class="column">
       <div class="ui form"
             ng-class="{'loading': loading}">
 
-        <div class="divided title">Basic Information</div>
+        <div class="divided title">Informação básica</div>
 
-        <fieldset ng-disabled="regIsClosed">
+        <fieldset>
 
         <div class="field">
           <label> Email </label>
@@ -21,95 +83,44 @@
         </div>
 
         <div class="field">
-          <label> Full Name </label>
+          <label> Nome </label>
           <input type="text"
                  name="name"
                  ng-model="user.profile.name">
         </div>
 
-        <div class="field" ng-show="autoFilledSchool">
-          <label> School </label>
+        <div class="field">
+          <label> Local </label>
           <input class="ui input"
-                 disabled="disabled"
-                 ng-show="autoFilledSchool"
-                 ng-model="user.profile.school">
-        </div>
-
-        <div class="field" ng-show="!autoFilledSchool">
-          <label> School </label>
-          <div id="school" class="ui search">
-            <div class="ui input">
-              <input class="prompt" type="text" placeholder="School" name="school" ng-model="user.profile.school">                
-            </div>
-            <div class="results"></div>
-          </div>
+                 ng-model="user.profile.place">
         </div>
 
         <div class="field">
-          <label>Graduation Year</label>
-          <select
-            name="year"
-            ng-model="user.profile.graduationYear">
-            <option value="">Graduation Year</option>
-            <option value="2016">2016</option>
-            <option value="2017">2017</option>
-            <option value="2018">2018</option>
-            <option value="2019">2019</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Gender</label>
-          <select
-            name="gender"
-            ng-model="user.profile.gender">
-            <option value="">Gender</option>
-            <option value="M">Male</option>
-            <option value="F">Female</option>
-            <option value="O">Other</option>
-            <option value="N">I prefer not to answer.</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>I would describe myself as a...</label>
+          <label>Eu sou</label>
           <input type="text"
-                 placeholder="Designer, Data Scientist, iOS Wizard, Hacker Extraordinaire"
+                 placeholder="Designer, Programador, Empreendedor, ..."
                  ng-model="user.profile.description">
         </div>
 
+
         <div class="field">
           <label>
-              What would you like to learn or get out of HackMIT? (optional)
+            Compartilhe algo legal sobre você
           </label>
-          <textarea ng-model="user.profile.essay">
+          <textarea ng-model="user.profile.essay"
+                    placeholder="Uma vez eu fui perseguido por dois cachorros mutantes"
+                    >
           </textarea>
         </div>
 
-        <div class="field"
-             ng-hide="isMitStudent">
-          <p>
-            Because of limitations imposed by MIT, we are not legally allowed to host
-            non-MIT minors (those under 18) for HackMIT 2015. Checking the box below affirms that you are or will be 18 years or older by September 19th, 2015.
-          </p>
-          <p>
-            <strong>
-            We will be checking ID. If you are a non-MIT minor, you will be turned away at the door.
-            </strong>
-          </p>
-          <div class="ui checkbox">
-            <input type="checkbox" id="adult" ng-model="user.profile.adult">
-            <label for="adult">I am 18 or older.</label>
-          </div>
-        </div>
 
         <br>
 
-        <div class="field" ng-hide="regIsClosed">
+        <div class="field">
           <button type="submit"
-                  class="fluid ui purple button"
+                  class="fluid ui black button"
                   ng-click="submitForm()">
-            Submit
+            Salvar
           </button>
         </div>
 

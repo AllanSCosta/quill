@@ -10,10 +10,11 @@ var morgan          = require('morgan');
 
 var mongoose        = require('mongoose');
 var port            = process.env.PORT || 3000;
-var database        = process.env.DATABASE || process.env.MONGODB_URI || "mongodb://localhost:27017";
+var database        = 'mongodb://heroku_h6lw40ns:qgejq8277oevrcbqaoo1djj7pl@ds241278.mlab.com:41278/heroku_h6lw40ns'
 
 var settingsConfig  = require('./config/settings');
 var adminConfig     = require('./config/admin');
+var Clipper         = require('image-clipper');
 
 var app             = express();
 
@@ -46,4 +47,3 @@ require('./app/server/routes')(app);
 // listen (start app with node server.js) ======================================
 app.listen(port);
 console.log("App listening on port " + port);
-

@@ -1,0 +1,129 @@
+<div id="team" class="page">
+  <div class="ui segment">
+    <style media="screen">
+
+      #team-section {
+        margin-bottom: 60px;
+      }
+
+      .social-media-icon {
+        color: black;
+        text-decoration: none !important;
+      }
+
+      .image-upload > input {
+        display: none;
+      }
+
+      .team-logo {
+        height: 130px;
+        cursor: pointer;
+        display:block;
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      #team-logo:hover {
+        opacity: 0.8;
+      }
+
+      .ui.dimmer {
+        text-align: left !important;
+      }
+
+      .modal-content {
+        overflow-x: hidden !important;
+      }
+
+      .circular--landscape {
+        display: block;
+        position: relative;
+        width: 175px;
+        height: 175px;
+        overflow: hidden;
+        border-radius: 50%;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+
+      .circular--landscape img {
+        width: auto;
+        height: 100%;
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+    </style>
+
+    <div class="divided title">
+      Equipes
+    </div>
+
+    <div class="ui stackable grid">
+      <div class="modal teamview-view bd-example-modal-lg">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+       <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="modalClose()" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+       <div class="modal-body">
+        <br><br>
+        <img id="team-logo-placeholder" class="team-logo" ng-show="!selectedTeam.profile.pic" src="../assets/images/logoplaceholder.png"/>
+
+        <div class="circular--landscape">
+          <img id="team-logo-picture" class="team-logo" ng-show="selectedTeam.profile.pic" src="{{selectedTeam.profile.pic}}"/>
+        </div>
+
+        <br><br>
+
+        <div class="title">
+          {{selectedTeam.name}}
+          <br>
+          <br>
+          <a  class="social-media-icon" ng-show="selectedTeam.profile.website" target="_blank" ng-href="{{selectedTeam.profile.website}}"> <i class="ion-md-globe"></i> </a>
+          <a  class="social-media-icon" ng-show="selectedTeam.profile.youtube" target="_blank" ng-href="{{selectedTeam.profile.youtube}}"> <i class="ion-logo-youtube"></i> </a>
+          <a  class="social-media-icon" ng-show="selectedTeam.profile.facebook" target="_blank" ng-href="{{selectedTeam.profile.facebook}}"> <i class="ion-logo-facebook"></i> </a>
+          <a  class="social-media-icon" ng-show="selectedTeam.profile.twitter" target="_blank" ng-href="{{selectedTeam.profile.twitter}}"> <i class="ion-logo-twitter"></i> </a>
+        </div>
+
+        <div ng-show="selectedTeam.profile.website || selectedTeam.profile.youtube || selectedTeam.profile.facebook || selectedTeam.profile.twitter "> <br><br> </div>
+
+        <div class="title small">
+          <span ng-show="selectedTeam.profile.whatsapp"> <i class="ion-logo-whatsapp"></i> {{selectedTeam.profile.whatsapp}} </span>
+          <br>
+          <br>
+          <i class="ion-md-mail"></i> {{selectedTeam.email}}
+        </div>
+        <div class="divided title"></div>
+
+        <div class="content">
+          <div id="team-description">
+          </div>
+        </div>
+        </div>
+        </div>
+      </div>
+      </div>
+      <div class="container">
+        <div ng-repeat="team_row in display_team" class="row">
+          <div
+            id="team-section"
+            ng-repeat="team in team_row"
+            class="col-sm"
+            ng-click="selectTeam(team)"
+          >
+            <img id="team-logo-placeholder" class="team-logo" ng-show="!team.profile.pic" src="../assets/images/logoplaceholder.png"/>
+            <div class="circular--landscape">
+              <img id="team-logo-picture" class="team-logo" ng-show="team.profile.pic" src="{{team.profile.pic}}"/>
+            </div>
+            <div id="team-name" class="title small">
+              {{team.name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
