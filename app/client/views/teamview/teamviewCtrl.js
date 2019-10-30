@@ -61,9 +61,11 @@ angular.module('reg')
         $scope.selectedTeam = team;
         console.log($scope.selectedTeam);
         $('.modal.teamview-view')
+          .modal({backdrop: 'static', keyboard: false})
+          .modal({closable  : false})
           .modal('show');
         $('#team-description').html(marked(team.profile.essay));
-        $('.modal.teamview-view').modal({backdrop: 'static', keyboard: false});
+        ;
       }
       $scope.selectTeam = selectTeam;
 

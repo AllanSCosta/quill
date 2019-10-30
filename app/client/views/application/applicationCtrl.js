@@ -72,9 +72,7 @@ angular.module('reg')
         UserService
           .updateProfile(Session.getUserId(), $scope.user.profile)
           .then(response => {
-            sweetAlert("Prontin", "Seu perfil foi salvo.", "success").then(value => {
-              $state.go("app.dashboard");
-            });
+            sweetAlert("Prontin", "Seu perfil foi salvo.", "success")
           }, response => {
             sweetAlert("Eita!", "Algo deu ruim.", "error");
           });

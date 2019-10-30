@@ -1,5 +1,5 @@
 // const angular = require("angular");
-// const swal = require("sweetalert");
+// const sweetAlert = require("sweetalert");
 // const sharp = require('gm');
 // const moment = require('moment');
 // const marked = require('marked');
@@ -30,6 +30,7 @@ angular.module('reg')
       ];
 
       $scope.toggleMarkdown = function() {
+        $scope.viewMarkdown = !$scope.viewMarkdown;
         $('#mdviewer').html(marked($scope.event.description));
         $('#mdviewer').height(
           $('#description-area').height()
@@ -64,11 +65,9 @@ angular.module('reg')
         EventService
           .createEvent($scope.event)
           .then(response => {
-            swal("Prontin", "Seu perfil foi salvo.", "success").then(value => {
-              $state.go("app.dashboard");
-            });
+            sweetAlert("Pronto", "Evento Criado", "success");
           }, response => {
-            swal("Eita!", "Algo deu ruim.", "error");
+            sweetAlert("Eita!", "Algo deu ruim.", "error");
           });
       }
 
@@ -80,12 +79,8 @@ angular.module('reg')
       };
 
       $scope.submitForm = function(){
-        if ($('.ui.form').form('is valid')){
           _createEvent();
-          closeNewEvent();
-        } else {
-          swal("Uh oh!", "Please Fill The Required Fields", "error");
-        }
+          $scope.closeNewEvent();
       };
 
       function formatTime(time){
@@ -96,14 +91,15 @@ angular.module('reg')
 
       $scope.modalClose = function() {
         $('.modal.admin-events')
+          .modal({closable  : false})
           .modal('hide');
       }
 
-
       $scope.openNewEvent = function(){
         $('.modal.new-event-form')
-          .modal('show');
-        $('.modal.new-event-form').modal({backdrop: 'static', keyboard: false});
+        .modal({backdrop: 'static', keyboard: false})
+        .modal({closable  : false})
+        .modal('show');
       }
 
       $scope.closeNewEvent = function() {

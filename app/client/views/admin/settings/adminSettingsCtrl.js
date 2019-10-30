@@ -32,7 +32,7 @@ angular.module('reg')
             const successText = $scope.settings.allowMinors ?
               "Minors are now allowed to register." :
               "Minors are no longer allowed to register."
-            swal("Looks good!", successText, "success");
+            sweetAlert("Looks good!", successText, "success");
           });
       };
 
@@ -48,7 +48,7 @@ angular.module('reg')
         SettingsService
           .updateWhitelistedEmails($scope.whitelist.replace(/ /g, '').split(','))
           .success(function(settings){
-            swal('Whitelist updated.');
+            sweetAlert('Whitelist updated.');
             $scope.whitelist = settings.whitelistedEmails.join(", ");
           });
       };
@@ -82,10 +82,10 @@ angular.module('reg')
         var close = cleanDate($scope.settings.timeClose).getTime();
 
         if (open < 0 || close < 0 || open === undefined || close === undefined){
-          return swal('Oops...', 'You need to enter valid times.', 'error');
+          return sweetAlert('Oops...', 'You need to enter valid times.', 'error');
         }
         if (open >= close){
-          swal('Oops...', 'Registration cannot open after it closes.', 'error');
+          sweetAlert('Oops...', 'Registration cannot open after it closes.', 'error');
           return;
         }
 
@@ -93,7 +93,7 @@ angular.module('reg')
           .updateRegistrationTimes(open, close)
           .success(function(settings){
             updateSettings(settings);
-            swal("Looks good!", "Registration Times Updated", "success");
+            sweetAlert("Looks good!", "Registration Times Updated", "success");
           });
       };
 
@@ -106,7 +106,7 @@ angular.module('reg')
           .updateConfirmationTime(confirmBy)
           .success(function(settings){
             updateSettings(settings);
-            swal("Sounds good!", "Confirmation Date Updated", "success");
+            sweetAlert("Sounds good!", "Confirmation Date Updated", "success");
           });
       };
 
@@ -123,7 +123,7 @@ angular.module('reg')
         SettingsService
           .updateWaitlistText(text)
           .success(function(data){
-            swal("Looks good!", "Waitlist Text Updated", "success");
+            sweetAlert("Looks good!", "Waitlist Text Updated", "success");
             updateSettings(data);
           });
       };
@@ -133,7 +133,7 @@ angular.module('reg')
         SettingsService
           .updateAcceptanceText(text)
           .success(function(data){
-            swal("Looks good!", "Acceptance Text Updated", "success");
+            sweetAlert("Looks good!", "Acceptance Text Updated", "success");
             updateSettings(data);
           });
       };
@@ -143,7 +143,7 @@ angular.module('reg')
         SettingsService
           .updateConfirmationText(text)
           .success(function(data){
-            swal("Looks good!", "Confirmation Text Updated", "success");
+            sweetAlert("Looks good!", "Confirmation Text Updated", "success");
             updateSettings(data);
           });
       };

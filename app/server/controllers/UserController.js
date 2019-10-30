@@ -1,5 +1,6 @@
 var _ = require('underscore');
 var User = require('../models/User');
+var Team = require('../models/Team');
 var Settings = require('../models/Settings');
 var Mailer = require('../services/email');
 var Stats = require('../services/stats');
@@ -255,7 +256,7 @@ UserController.getPage = function(query, callback){
  * @param  {Function} callback args(err, user)
  */
 UserController.getById = function (id, callback){
-  User.findById(id, callback);
+  User.findById(id).exec(callback);
 };
 
 /**
@@ -266,7 +267,6 @@ UserController.getById = function (id, callback){
  * @param  {Function} callback Callback with args (err, user)
  */
 UserController.updateProfileById = function (id, profile, callback){
-
   // Validate the user profile, and mark the user as profile completed
   // when successful.
   User.validateProfile(profile, function(err){
@@ -324,7 +324,7 @@ UserController.updateProfileById = function (id, profile, callback){
  */
 UserController.updateConfirmationById = function (id, confirmation, callback){
 
-  User.findById(id, function(err, user){
+  User.findById(id).exec(function(err, user){
 
     if(err || !user){
       return callback(err);
@@ -412,7 +412,7 @@ UserController.verifyByToken = function(token, callback){
  * @param  {Function} callback args(err, users)
  */
 UserController.getTeammates = function(id, callback){
-  User.findById(id, function(err, user){
+  User.findById(id).exec(function(err, user){
     if (err || !user){
       return callback(err, user);
     }
@@ -440,45 +440,22 @@ UserController.getTeammates = function(id, callback){
  * @param  {String}   code     Code of the proposed team
  * @param  {Function} callback args(err, users)
  */
-UserController.createOrJoinTeam = function(id, code, callback){
+UserController.getTeam = function(id, code, callback){
+  User.findById(id).exec(function(err, user){
+    if (err || !user){
+      return callback(err, user);
+    }
 
-  if (!code){
-    return callback({
-      message: "Please enter a team name."
-    });
-  }
+    var code = user.teamCode;
 
-  if (typeof code !== 'string') {
-    return callback({
-      message: "Get outta here, punk!"
-    });
-  }
-
-  User.find({
-    teamCode: code
-  })
-  .select('profile.name')
-  .exec(function(err, users){
-    // Check to see if this team is joinable (< team max size)
-    if (users.length >= maxTeamSize){
+    if (!code){
       return callback({
-        message: "Team is full."
+        message: "You're not on a team."
       });
     }
 
-    // Otherwise, we can add that person to the team.
-    User.findOneAndUpdate({
-      _id: id,
-      verified: true
-    },{
-      $set: {
-        teamCode: code
-      }
-    }, {
-      new: true
-    },
-    callback);
-
+    Team.find({name: code})
+      .exec(callback);
   });
 };
 

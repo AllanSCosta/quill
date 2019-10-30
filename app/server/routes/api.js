@@ -239,8 +239,7 @@ module.exports = function(router) {
     var code = req.body.code;
     var id = req.params.id;
 
-    UserController.createOrJoinTeam(id, code, defaultResponse(req, res));
-
+    UserController.getTeam(id, code, defaultResponse(req, res));
   });
 
   /**

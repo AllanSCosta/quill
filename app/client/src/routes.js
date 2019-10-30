@@ -115,6 +115,9 @@ angular.module('reg')
           requireVerified: true
         },
         resolve: {
+          currentTeam: function(UserService){
+            return UserService.getTeam();
+          },
           currentUser: function(UserService){
             return UserService.getCurrentUser();
           },
@@ -135,11 +138,6 @@ angular.module('reg')
           requireAdmin: true
         }
       })
-      .state('app.admin.stats', {
-        url: "/admin",
-        templateUrl: "views/admin/stats/stats.html",
-        controller: 'AdminStatsCtrl'
-      })
       .state('app.admin.events', {
         url: "/admin",
         templateUrl: "views/admin/events/events.html",
@@ -154,6 +152,11 @@ angular.module('reg')
             return EventService.get($stateParams.id);
           }
         }
+      })
+      .state('app.admin.stats', {
+        url: "/admin",
+        templateUrl: "views/admin/stats/stats.html",
+        controller: 'AdminStatsCtrl'
       })
       .state('app.admin.users', {
         url: "/admin/users?" +

@@ -8,14 +8,113 @@ angular.module('reg')
     'Utils',
     'AuthService',
     'UserService',
+    'EventService',
     'EVENT_INFO',
     'DASHBOARD',
-    function($rootScope, $scope, $sce, currentUser, settings, Utils, AuthService, UserService, EVENT_INFO, DASHBOARD){
+    function($rootScope, $scope, $sce, currentUser, settings, Utils, AuthService, UserService, EventService, EVENT_INFO, DASHBOARD){
       var Settings = settings.data;
+      // console.log(moment);
+      // moment.locale('ru');
+      // var moment = moment();
+
+      $scope.setToToday = function() {
+        $scope.viewDate = new Date();
+      }
+
       var user = currentUser.data;
       $scope.user = user;
+
+      $scope.viewDate = new Date();
+      $scope.view = 'month';
+
       $scope.timeClose = Utils.formatTime(Settings.timeClose);
       $scope.timeConfirm = Utils.formatTime(Settings.timeConfirm);
+
+      $scope.event = {};
+      $scope.events = [];
+      $scope.comingEvents = [];
+      $scope.selectedEvent = {};
+
+      function updatePage(data){
+        var p = [];
+        for (var i = 0; i < data.totalPages; i++){
+          p.push(i);
+        }
+        $scope.pages = p;
+
+        $scope.events = Array.from(data).map(function(evt) {
+          return {
+            title: evt.title,
+            startsAt: evt.startsAt ? new Date(evt.startsAt) : new Date(evt.endsAt),
+            endsAt: evt.startsAt ? new Date(evt.endsAt) : null,
+            color: {
+              primary: evt.color,
+              secondary: evt.color
+            },
+            description: evt.description,
+            actions: [{
+              label: '<i class=\'glyphicon glyphicon-pencil\'></i>',
+              cssClass: 'edit-action',
+              onClick: function(args) {
+                console.log('Edit event', args.calendarEvent);
+              }
+            }],
+            draggable: false,
+            resizable: false,
+            incrementsBadgeTotal: true,
+            cssClass: 'a-css-class-name',
+            allDay: false
+          };
+        });
+
+        $scope.comingEvents = [...$scope.events].filter((a) => {
+          const now = new Date();
+          if (a.endsAt){
+            return a.endsAt > now;
+          } else {
+            return a.startsAt > now;
+          }
+        });
+
+        $scope.comingEvents.sort((a, b) => { a.startsAt > b.startsAt });
+      }
+
+     $scope.clickEvent = function(data){
+       evt = Object.assign({}, data);
+
+       if (evt.startsAt) {
+         evt.startsAt = moment(evt.startsAt).format('MMMM Do YYYY, h:mm:ss a');
+       }
+
+       if (evt.endsAt) {
+         evt.endsAt = moment(evt.endsAt).format('MMMM Do YYYY, h:mm:ss a');
+       }
+
+       if (evt.startsAt && evt.endsAt) {
+         evt.endsAt = moment(evt.endsAt).format('h:mm:ss a');
+       }
+
+       $scope.selectedEvent = evt;
+       $('.modal.calendar-events')
+         .modal('show');
+
+       $('.modal-header').css('background-color', evt.color.primary);
+       $('.modal.calendar-events').modal({backdrop: 'static', keyboard: false});
+       $('#event-description').html(marked(evt.description));
+     }
+
+      EventService
+        .getAll()
+        .then(response => {
+          updatePage(response.data);
+        });
+
+
+      $scope.modalClose = function() {
+        $('.modal.calendar-events')
+          .modal('hide');
+      }
+
 
       $scope.DASHBOARD = DASHBOARD;
 
@@ -70,8 +169,8 @@ angular.module('reg')
       $scope.resendEmail = function(){
         AuthService
           .resendVerificationEmail()
-          .then(function(){
-            sweetAlert('Your email has been sent.');
+          .then(response => {
+            sweetAlert("Your email has been sent.");
           });
       };
 
@@ -86,23 +185,35 @@ angular.module('reg')
 
       $scope.declineAdmission = function(){
 
-        swal({
-          title: "Whoa!",
-          text: "Are you sure you would like to decline your admission? \n\n You can't go back!",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Yes, I can't make it.",
-          closeOnConfirm: true
-          }, function(){
+      sweetAlert({
+        title: "Whoa!",
+        text: "Are you sure you would like to decline your admission? \n\n You can't go back!",
+        icon: "warning",
+        buttons: {
+          cancel: {
+            text: "Cancel",
+            value: null,
+            visible: true
+          },
+          confirm: {
+            text: "Yes, I can't make it",
+            value: true,
+            visible: true,
+            className: "danger-button"
+          }
+        }
+      }).then(value => {
+        if (!value) {
+          return;
+        }
 
-            UserService
-              .declineAdmission(user._id)
-              .success(function(user){
-                $rootScope.currentUser = user;
-                $scope.user = user;
-              });
-        });
-      };
+        UserService
+          .declineAdmission(user._id)
+          .then(response => {
+            $rootScope.currentUser = response.data;
+            $scope.user = response.data;
+          });
+      });
+    };
 
-    }]);
+  }]);

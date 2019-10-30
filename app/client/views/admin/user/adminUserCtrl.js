@@ -35,10 +35,10 @@ angular.module('reg')
           .updateProfile($scope.selectedUser._id, $scope.selectedUser.profile)
           .success(function(data){
             $selectedUser = data;
-            swal("Updated!", "Profile updated.", "success");
+            sweetAlert("Updated!", "Profile updated.", "success");
           })
           .error(function(){
-            swal("Oops, you forgot something.");
+            sweetAlert("Oops, you forgot something.");
           });
       };
 

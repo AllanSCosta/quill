@@ -70,9 +70,9 @@
         </div>
        <div class="modal-body">
         <br><br>
-        <img id="team-logo-placeholder" class="team-logo" ng-show="!selectedTeam.profile.pic" src="../assets/images/logoplaceholder.png"/>
 
         <div class="circular--landscape">
+          <img id="team-logo-placeholder" class="team-logo" ng-show="!selectedTeam.profile.pic" src="../assets/images/logoplaceholder.png"/>
           <img id="team-logo-picture" class="team-logo" ng-show="selectedTeam.profile.pic" src="{{selectedTeam.profile.pic}}"/>
         </div>
 
@@ -114,8 +114,8 @@
             class="col-sm"
             ng-click="selectTeam(team)"
           >
-            <img id="team-logo-placeholder" class="team-logo" ng-show="!team.profile.pic" src="../assets/images/logoplaceholder.png"/>
             <div class="circular--landscape">
+              <img id="team-logo-placeholder" class="team-logo" ng-show="!team.profile.pic" src="../assets/images/logoplaceholder.png"/>
               <img id="team-logo-picture" class="team-logo" ng-show="team.profile.pic" src="{{team.profile.pic}}"/>
             </div>
             <div id="team-name" class="title small">

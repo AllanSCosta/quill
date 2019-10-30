@@ -10,11 +10,10 @@ var morgan          = require('morgan');
 
 var mongoose        = require('mongoose');
 var port            = process.env.PORT || 3000;
-var database        = 'mongodb://heroku_h6lw40ns:qgejq8277oevrcbqaoo1djj7pl@ds241278.mlab.com:41278/heroku_h6lw40ns'
+var database        = 'mongodb://heroku_229c69cw:qh0v96t1sdpi0cokh8odai3dqt@ds141178.mlab.com:41178/heroku_229c69cw'
 
 var settingsConfig  = require('./config/settings');
 var adminConfig     = require('./config/admin');
-var Clipper         = require('image-clipper');
 
 var app             = express();
 

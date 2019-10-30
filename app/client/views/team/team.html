@@ -54,14 +54,13 @@
     }
 
 
-
   </style>
 
   <div class="image-upload field">
     <label for="file-input">
-      <img id="team-logo-placeholder" class="team-logo" ng-show="!selectedPic" src="../assets/images/logoplaceholder.png"/>
 
       <div class="circular--landscape">
+        <img id="team-logo-placeholder" class="team-logo" ng-show="!selectedPic" src="../assets/images/logoplaceholder.png"/>
         <img id="team-logo-picture" class="team-logo" ng-show="selectedPic" src="{{selectedPic}}"/>
       </div>
 
@@ -160,14 +159,17 @@
                 <div class="btn-group">
                   <label
                     class="btn btn-outline-dark"
+                    ng-class="viewMarkdown ? '' : 'active'"
                     ng-click="toggleMarkdown()"
-                    ng-model="viewMarkdown"
-                    uib-btn-radio="false">Edição</label>
+                    uib-btn-radio="true">
+                    Edição
+                  </label>
                   <label
                     class="btn btn-outline-dark"
+                    ng-class="viewMarkdown ? 'active' : ''"
                     ng-model="viewMarkdown"
                     ng-click="toggleMarkdown()"
-                    uib-btn-radio="true">Preview</label>
+                    uib-btn-radio="false">Preview</label>
                 </div>
               </div>
               <textarea

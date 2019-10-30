@@ -22,22 +22,18 @@
 
 </style>
 
-
 <div class="ui segment">
   <div class="ui stackable grid">
     <div id="table-container" class="column">
       <div class="ui header">
         Eventos
-        <button id="new-event-btn" class="btn btn-dark" ng-click="openNewEvent()"> Novo Evento </button>
+        <button id="new-event-btn" class="btn btn-dark" data-dismiss="modal" ng-click="openNewEvent()"> Novo Evento </button>
       </div>
-
-      <div class="modal admin-events bd-example-modal-lg">
+      <div class="modal admin-events bd-example-modal-lg" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
        <div class="modal-content">
-
          <div class="modal-header">
            <h5 class="modal-title">  <h2> {{selectedEvent.title}} </h2> </h5>
-
            <button type="button" class="close" ng-click="modalClose()" data-dismiss="modal" aria-label="Close">
              <span aria-hidden="true">&times;</span>
            </button>
@@ -57,18 +53,15 @@
              </p>
            </div>
            <br><br>
-
           <div id="event-description">
           </div>
         </div>
-
         </div>
       </div>
     </div>
 
-
       <div class="modal new-event-form bd-example-modal-lg">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" data-keyboard="false" data-backdrop="static" role="document">
        <div class="modal-content">
          <div class="modal-header">
            <h5 class="modal-title">  <b> Novo Evento </b> </h5>
@@ -77,27 +70,20 @@
            </button>
          </div>
          <div class="modal-body">
-
            <div class="ui form">
-
-
            <fieldset>
-
            <div class="field">
              <label> Título </label>
              <input type="text"
                     name="name"
                     ng-model="event.title">
            </div>
-
              <div class="field">
                <label id="color-label">Cor</label>
                <select ng-model="event.color" name="cor">
                  <option ng-repeat="x in colors" value="{{x.code}}" ng-selected="x.code == event.color">{{x.name}}</option>
                </select>
              </div>
-
-
              <div class="field">
                <label>Tipo de Evento</label>
                <select

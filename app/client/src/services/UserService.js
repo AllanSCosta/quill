@@ -53,7 +53,7 @@ angular.module('reg')
       // ------------------------
       // Team
       // ------------------------
-      joinOrCreateTeam: function(code){
+      getTeam: function(code){
         return $http.put(base + Session.getUserId() + '/team', {
           code: code
         });

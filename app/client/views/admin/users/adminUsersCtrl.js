@@ -65,7 +65,7 @@ angular.module('reg')
         $event.stopPropagation();
 
         if (!user.status.checkedIn){
-          swal({
+          sweetAlert({
             title: "Whoa, wait a minute!",
             text: "You are about to check in " + user.profile.name + "!",
             type: "warning",
@@ -79,7 +79,7 @@ angular.module('reg')
                 .checkIn(user._id)
                 .success(function(user){
                   $scope.users[index] = user;
-                  swal("Accepted", user.profile.name + ' has been checked in.', "success");
+                  sweetAlert("Accepted", user.profile.name + ' has been checked in.', "success");
                 });
             }
           );
@@ -88,7 +88,7 @@ angular.module('reg')
             .checkOut(user._id)
             .success(function(user){
               $scope.users[index] = user;
-              swal("Accepted", user.profile.name + ' has been checked out.', "success");
+              sweetAlert("Accepted", user.profile.name + ' has been checked out.', "success");
             });
         }
       };
@@ -96,7 +96,7 @@ angular.module('reg')
       $scope.acceptUser = function($event, user, index) {
         $event.stopPropagation();
 
-        swal({
+        sweetAlert({
           title: "Whoa, wait a minute!",
           text: "You are about to accept " + user.profile.name + "!",
           type: "warning",
@@ -106,7 +106,7 @@ angular.module('reg')
           closeOnConfirm: false
           }, function(){
 
-            swal({
+            sweetAlert({
               title: "Are you sure?",
               text: "Your account will be logged as having accepted this user. " +
                 "Remember, this power is a privilege.",
@@ -121,7 +121,7 @@ angular.module('reg')
                   .admitUser(user._id)
                   .success(function(user){
                     $scope.users[index] = user;
-                    swal("Accepted", user.profile.name + ' has been admitted.', "success");
+                    sweetAlert("Accepted", user.profile.name + ' has been admitted.', "success");
                   });
 
               });
@@ -134,7 +134,7 @@ angular.module('reg')
         $event.stopPropagation();
 
         if (!user.admin){
-          swal({
+          sweetAlert({
             title: "Whoa, wait a minute!",
             text: "You are about make " + user.profile.name + " an admin!",
             type: "warning",
@@ -148,7 +148,7 @@ angular.module('reg')
                 .makeAdmin(user._id)
                 .success(function(user){
                   $scope.users[index] = user;
-                  swal("Made", user.profile.name + ' an admin.', "success");
+                  sweetAlert("Made", user.profile.name + ' an admin.', "success");
                 });
             }
           );
@@ -157,7 +157,7 @@ angular.module('reg')
             .removeAdmin(user._id)
             .success(function(user){
               $scope.users[index] = user;
-              swal("Removed", user.profile.name + ' as admin', "success");
+              sweetAlert("Removed", user.profile.name + ' as admin', "success");
             });
         }
       };

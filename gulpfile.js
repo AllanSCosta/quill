@@ -12,7 +12,7 @@ var environment = process.env.NODE_ENV;
 
 var nodemon = require('gulp-nodemon');
 
-function swallowError (error) {
+function sweetAlertlowError (error) {
     //If you want details of the error in the console
     console.log(error.toString());
     this.emit('end');
@@ -29,7 +29,7 @@ gulp.task('js', function () {
       .pipe(sourcemaps.init())
         .pipe(concat('app.js'))
         .pipe(ngAnnotate())
-        .on('error', swallowError)
+        .on('error', sweetAlertlowError)
         .pipe(uglify())
       .pipe(gulp.dest('app/client/build'));
   } else {
@@ -37,7 +37,7 @@ gulp.task('js', function () {
       .pipe(sourcemaps.init())
         .pipe(concat('app.js'))
         .pipe(ngAnnotate())
-        .on('error', swallowError)
+        .on('error', sweetAlertlowError)
       .pipe(sourcemaps.write())
       .pipe(gulp.dest('app/client/build'));
   }

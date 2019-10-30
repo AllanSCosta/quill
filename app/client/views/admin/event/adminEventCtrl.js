@@ -1,4 +1,4 @@
-// const swal = require('sweetalert');
+// const sweetAlert = require('sweetalert');
 // const marked = require('marked');
 
 angular.module('reg')
@@ -20,6 +20,7 @@ angular.module('reg')
       ];
 
       $scope.toggleMarkdown = function() {
+        $scope.viewMarkdown = !$scope.viewMarkdown;
         $('#mdviewer').html(marked($scope.event.description));
         $('#mdviewer').height(
           $('#description-area').height()
@@ -34,9 +35,9 @@ angular.module('reg')
           .updateProfile($scope.event._id, $scope.event)
           .then(response => {
             $selectedEvent = response.data;
-            swal("Updated!", "Profile updated.", "success");
+            sweetAlert("Updated!", "Profile updated.", "success");
           }, response => {
-            swal("Oops, you forgot something.");
+            sweetAlert("Oops, you forgot something.");
           });
       };
     }]);
